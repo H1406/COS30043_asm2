@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Portal</title>
+
+    <link rel="stylesheet" href="framework/css/bootstrap.min.css">
+    <link rel="stylesheet" href="framework/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="framework/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Navigation Bar -->
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" @click="toggleMenu" :class="{ collapsed: !menuOpen }">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <router-link to="/" class="navbar-brand" @click.native="closeMenu">
+                        <strong>Job Portal</strong>
+                    </router-link>
+                </div>
+                <div id="navbar" class="navbar-collapse" :class="{ collapse: !menuOpen, in: menuOpen }">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <router-link to="/" exact @click.native="closeMenu">
+                                <span class="mdi mdi-home"></span> Home
+                            </router-link>
+                        </li>
+                        <li>
+                            <router-link to="/jobs" @click.native="closeMenu">
+                                <span class="mdi mdi-briefcase"></span> Jobs Explorer
+                            </router-link>
+                        </li>
+                        <li>
+                            <router-link to="/todos" @click.native="closeMenu">
+                                <span class="mdi mdi-format-list-checks"></span> To-Do List
+                            </router-link>
+                        </li>
+                        <li>
+                            <router-link to="/about" @click.native="closeMenu">
+                                <span class="mdi mdi-information"></span> About
+                            </router-link>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <div class="container main-content">
+            <router-view></router-view>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <p class="text-muted text-center">
+                    &copy; 2026 Job Portal. Interface Design and Development - Assignment 2
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="framework/js/vue.js"></script>
+    <script src="framework/js/vue-router.js"></script>
+
+    <script src="components/data.js"></script>
+    <script src="components/Home.js"></script>
+    <script src="components/JobList.js"></script>
+    <script src="components/JobDetail.js"></script>
+    <script src="components/ApplicationForm.js"></script>
+    <script src="components/TodoList.js"></script>
+    <script src="components/About.js"></script>
+
+    <script src="router/router.js"></script>
+    <script src="App.js"></script>
+    <script>
+        if (typeof Vue === 'undefined') {
+            console.error('Vue.js is not loaded! Check the path: framework/js/vue.js');
+            document.body.innerHTML = '<div style="padding: 50px; text-align: center;"><h1 style="color: red;">Error: Vue.js failed to load</h1><p>Please ensure you are running this from a local server (e.g., python -m http.server 8000)</p><p>File protocol (file:///) may not work properly with Vue Router.</p></div>';
+        } else if (typeof VueRouter === 'undefined') {
+            console.error('Vue Router is not loaded! Check the path: framework/js/vue-router.js');
+            document.body.innerHTML = '<div style="padding: 50px; text-align: center;"><h1 style="color: red;">Error: Vue Router failed to load</h1><p>Please ensure you are running this from a local server.</p></div>';
+        } else {
+            console.log('Vue.js loaded successfully - Version:', Vue.version);
+            console.log('Vue Router loaded successfully');
+            console.log('Vue object:', Vue);
+            console.log('VueRouter object:', VueRouter);
+        }
+    </script>
+</body>
+
+</html>
