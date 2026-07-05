@@ -8,10 +8,11 @@ const ApplicationForm = {
         Please fill out the form below to apply for this position. All fields marked with <span class="required-mark">*</span> are required.
       </p>
       
-      <form  method="POST" action="http://mercury.swin.edu.au/it000000/formtest.php"
+      <form  method="POST" action="https://mercury.swin.edu.au/it000000/formtest.php"
         @submit="handleSubmit"
         class="aurora-form"
         autocomplete="off"
+        enctype="multipart/form-data"
       >
         <div class="row">
           <div class="col-md-6">
@@ -21,6 +22,7 @@ const ApplicationForm = {
                 type="text" 
                 class="form-control" 
                 id="firstName" 
+                name="firstName"
                 v-model="formData.firstName" 
                 required
                 pattern="[A-Za-z]+"
@@ -35,6 +37,7 @@ const ApplicationForm = {
                 type="text" 
                 class="form-control" 
                 id="lastName" 
+                name="lastName"
                 v-model="formData.lastName" 
                 required
                 pattern="[A-Za-z]+"
@@ -52,6 +55,7 @@ const ApplicationForm = {
                 type="text" 
                 class="form-control" 
                 id="username" 
+                name="username"
                 v-model="formData.username" 
                 required
                 minlength="3"
@@ -66,6 +70,7 @@ const ApplicationForm = {
                 type="date" 
                 class="form-control" 
                 id="dob" 
+                name="dob"
                 v-model="formData.dob" 
                 required
                 :max="maxDate"
@@ -84,6 +89,7 @@ const ApplicationForm = {
                 type="password" 
                 class="form-control" 
                 id="password" 
+                name="password"
                 v-model="formData.password" 
                 required
                 minlength="8"
@@ -99,6 +105,7 @@ const ApplicationForm = {
                 type="password" 
                 class="form-control" 
                 id="confirmPassword" 
+                name="confirmPassword"
                 v-model="formData.confirmPassword" 
                 required
                 @input="checkPasswordMatch"
@@ -116,6 +123,7 @@ const ApplicationForm = {
                 type="email" 
                 class="form-control" 
                 id="email" 
+                name="email"
                 v-model="formData.email" 
                 required
                 placeholder="your.email@example.com">
@@ -128,6 +136,7 @@ const ApplicationForm = {
                 type="tel" 
                 class="form-control" 
                 id="phone" 
+                name="phone"
                 v-model="formData.phone" 
                 required
                 pattern="04[0-9]{8}"
@@ -143,6 +152,7 @@ const ApplicationForm = {
             type="text" 
             class="form-control" 
             id="address" 
+            name="address"
             v-model="formData.address" 
             maxlength="40"
             placeholder="Enter your street address (optional, max 40 characters)">
@@ -156,6 +166,7 @@ const ApplicationForm = {
                 type="text" 
                 class="form-control" 
                 id="suburb" 
+                name="suburb"
                 v-model="formData.suburb" 
                 maxlength="20"
                 placeholder="Suburb (optional, max 20 characters)">
@@ -164,7 +175,7 @@ const ApplicationForm = {
           <div class="col-md-4">
             <div class="form-group">
               <label for="state">State <span class="required-mark">*</span></label>
-              <select class="form-control" id="state" v-model="formData.state" required>
+              <select class="form-control" id="state" name="state" v-model="formData.state" required>
                 <option value="">Select State</option>
                 <option value="VIC">Victoria</option>
                 <option value="NSW">New South Wales</option>
@@ -184,6 +195,7 @@ const ApplicationForm = {
                 type="text" 
                 class="form-control" 
                 id="postcode" 
+                name="postcode"
                 v-model="formData.postcode" 
                 required
                 pattern="[0-9]{4}"
@@ -195,7 +207,7 @@ const ApplicationForm = {
         
         <div class="form-group">
           <label for="jobCategory">Preferred Job Category <span class="required-mark">*</span></label>
-          <select class="form-control" id="jobCategory" v-model="formData.jobCategory" required>
+          <select class="form-control" id="jobCategory" name="jobCategory" v-model="formData.jobCategory" required>
             <option value="">Select a category</option>
             <option value="AI">AI</option>
             <option value="Data Science">Data Science</option>
@@ -211,6 +223,7 @@ const ApplicationForm = {
           <textarea 
             class="form-control" 
             id="skills" 
+            name="skills"
             v-model="formData.skills" 
             rows="3" 
             required
@@ -225,6 +238,7 @@ const ApplicationForm = {
           <textarea 
             class="form-control" 
             id="experience" 
+            name="experience"
             v-model="formData.experience" 
             rows="4" 
             required
@@ -236,6 +250,7 @@ const ApplicationForm = {
           <textarea 
             class="form-control" 
             id="coverLetter" 
+            name="coverLetter"
             v-model="formData.coverLetter" 
             rows="6" 
             required
@@ -248,6 +263,7 @@ const ApplicationForm = {
             type="file" 
             class="form-control" 
             id="resume" 
+            name="resume"
             @change="handleFileUpload"
             accept=".pdf,.doc,.docx"
             required>
@@ -278,7 +294,7 @@ const ApplicationForm = {
             </div>
             <div class="checkbox">
               <label>
-                <input type="checkbox" v-model="formData.agreeTerms" required>
+                <input type="checkbox" name="agreeTerms" value="yes" v-model="formData.agreeTerms" required>
                 I have read and agree to the terms and conditions
               </label>
             </div>
@@ -337,6 +353,20 @@ const ApplicationForm = {
     }
   },
   methods: {
+    handleSubmit(event) {
+      this.checkPasswordMatch();
+
+      if (this.passwordMismatch) {
+        event.preventDefault();
+        alert('Please make sure your passwords match before submitting.');
+        return;
+      }
+
+      if (!this.formData.resume) {
+        event.preventDefault();
+        alert('Please upload your resume before submitting.');
+      }
+    },
     checkPasswordMatch() {
       this.passwordMismatch = this.formData.password !== this.formData.confirmPassword;
     },
@@ -365,86 +395,6 @@ const ApplicationForm = {
           return;
         }
         this.formData.resume = file;
-      }
-    },
-    submitApplication() {
-      // Create FormData object for file upload
-      const formDataToSend = new FormData();
-
-      // Append all form fields
-      formDataToSend.append('firstName', this.formData.firstName);
-      formDataToSend.append('lastName', this.formData.lastName);
-      formDataToSend.append('username', this.formData.username);
-      formDataToSend.append('dob', this.formData.dob);
-      formDataToSend.append('password', this.formData.password);
-      formDataToSend.append('email', this.formData.email);
-      formDataToSend.append('phone', this.formData.phone);
-      formDataToSend.append('address', this.formData.address);
-      formDataToSend.append('suburb', this.formData.suburb);
-      formDataToSend.append('state', this.formData.state);
-      formDataToSend.append('postcode', this.formData.postcode);
-      formDataToSend.append('jobCategory', this.formData.jobCategory);
-      formDataToSend.append('skills', this.formData.skills);
-      formDataToSend.append('experience', this.formData.experience);
-      formDataToSend.append('coverLetter', this.formData.coverLetter);
-      formDataToSend.append('agreeTerms', this.formData.agreeTerms);
-
-      // Append job details
-      formDataToSend.append('job_id', this.job.job_id);
-      formDataToSend.append('job_title', this.job.job_title);
-      formDataToSend.append('company', this.job.company);
-
-      // Append resume file
-      if (this.formData.resume) {
-        formDataToSend.append('resume', this.formData.resume);
-      }
-
-      // Submit URL - as specified in the form action
-      const submitURL = 'https://mercury.swin.edu.au/it000000/formtest.php';
-
-      // Send POST request
-      fetch(submitURL, {
-        method: 'POST',
-        body: formDataToSend
-      })
-        .then(response => response.text())
-        .then(data => {
-          alert(`Application submitted successfully!\n\nThank you for applying to the ${this.job.job_title} position at ${this.job.company}.\n\nWe will review your application and contact you soon.`);
-          // Reset form
-          this.resetForm();
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          alert('There was an error submitting your application. Please try again.');
-        });
-    },
-    resetForm() {
-      this.formData = {
-        firstName: '',
-        lastName: '',
-        username: '',
-        dob: '',
-        password: '',
-        confirmPassword: '',
-        email: '',
-        phone: '',
-        address: '',
-        suburb: '',
-        state: '',
-        postcode: '',
-        jobCategory: '',
-        skills: '',
-        experience: '',
-        coverLetter: '',
-        resume: null,
-        agreeTerms: false
-      };
-      this.showTerms = false;
-      this.passwordMismatch = false;
-      // Reset file input
-      const fileInput = document.getElementById('resume');
-      if (fileInput) {
-        fileInput.value = '';
       }
     }
   }
