@@ -8,7 +8,7 @@ const ApplicationForm = {
         Please fill out the form below to apply for this position. All fields marked with <span class="required-mark">*</span> are required.
       </p>
       
-      <form @submit.prevent="submitApplication" method="POST" action="http://mercury.swin.edu.au/it000000/formtest.php">
+      <form @submit.prevent="submitApplication" method="POST" action="https://mercury.swin.edu.au/it000000/formtest.php">
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
@@ -396,7 +396,7 @@ const ApplicationForm = {
       }
 
       // Submit URL - as specified in the form action
-      const submitURL = 'http://mercury.swin.edu.au/it000000/formtest.php';
+      const submitURL = 'https://mercury.swin.edu.au/it000000/formtest.php';
 
       // Send POST request
       fetch(submitURL, {
