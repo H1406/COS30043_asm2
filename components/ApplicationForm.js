@@ -8,7 +8,11 @@ const ApplicationForm = {
         Please fill out the form below to apply for this position. All fields marked with <span class="required-mark">*</span> are required.
       </p>
       
-      <form @submit.prevent="submitApplication" method="POST" action="https://mercury.swin.edu.au/it000000/formtest.php">
+      <form @submit.prevent="submitApplication" method="POST" action="http://mercury.swin.edu.au/it000000/formtest.php"
+        @submit="handleSubmit"
+        class="aurora-form"
+        autocomplete="off"
+      >
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
